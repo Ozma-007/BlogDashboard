@@ -1,0 +1,90 @@
+import { useEffect, useState } from "react";
+
+const initialPosts = [
+  {
+    id: 1,
+    title: "Getting Started with React Hooks",
+    author: "Sarah Chen",
+    category: "Development",
+    status: "Published",
+    views: 12450,
+    date: "Sep 24, 2026",
+  },
+  {
+    id: 2,
+    title: "10 UI Design Principles",
+    author: "Alex Morgan",
+    category: "Design",
+    status: "Published",
+    views: 8930,
+    date: "Sep 21, 2026",
+  },
+  {
+    id: 3,
+    title: "Building Better React Components",
+    author: "John Carter",
+    category: "Development",
+    status: "Draft",
+    views: 0,
+    date: "Sep 19, 2026",
+  },
+  {
+    id: 4,
+    title: "The Future of Web Development",
+    author: "Emily Davis",
+    category: "Technology",
+    status: "Published",
+    views: 6210,
+    date: "Sep 15, 2026",
+  },
+];
+
+export default function usePosts() {
+  const [posts, setPosts] = useState(() => {
+    const saved = localStorage.getItem("blog-posts");
+    return saved ? JSON.parse(saved) : initialPosts;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("blog-posts", JSON.stringify(posts));
+  }, [posts]);
+
+  const addPost = (post) => {
+    setPosts((current) => [
+      {
+        ...post,
+        id: Date.now(),
+        views: 0,
+        date: new Date().toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
+      },
+      ...current,
+    ]);
+  };
+
+  const updatePost = (id, updatedPost) => {
+    setPosts((current) =>
+      current.map((post) =>
+        post.id === id
+          ? { ...post, ...updatedPost }
+          : post
+      )
+    );
+  };
+
+  const deletePost = (id) => {
+    setPosts((current) =>
+      current.filter((post) => post.id !== id)
+    );
+  };
+
+  return {
+    posts,
+    addPost,
+    updatePost,
+    deletePost,
+  };
+}

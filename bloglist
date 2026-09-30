@@ -1,0 +1,34 @@
+import BlogCard from "./BlogCard";
+
+function BlogList({ blogs }) {
+  if (blogs.length === 0) {
+    return (
+      <div className="no-results">
+        <h2>No blogs found</h2>
+        <p>Try searching for a different title or category.</p>
+      </div>
+    );
+  }
+
+  return (
+    <section className="blog-section" id="blogs">
+      <div className="section-header">
+        <div>
+          <h2>All Blogs</h2>
+          <p>{blogs.length} article(s) available</p>
+        </div>
+      </div>
+
+      <div className="blog-grid">
+        {blogs.map((blog) => (
+          <BlogCard
+            key={blog.id}
+            blog={blog}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default BlogList;
